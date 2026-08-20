@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-19
 
-**Status**: Draft — specification complete; downstream work blocked
+**Status**: Ready for planning — repository availability gate cleared on 2026-08-20
 
 **Input**: Azure story MET-001, work item 241: provide an installed console command that starts the analyzer and dispatches to the selected analysis subcommand.
 
@@ -119,11 +119,11 @@ As a developer with the product installed, I can invoke `radon` from a shell wit
 
 ## Active Blocker and Dependencies
 
-**Active Blocker**: Specification and clarification MAY proceed. Implementation planning, task generation, and implementation are BLOCKED until all of the following are true:
+**Cleared Dependency Gate**: The repository-availability blocker was revalidated and cleared on 2026-08-20. The required conditions were evaluated as follows:
 
-1. SETUP-001 Azure work item 343 is satisfied.
-2. A local Rust product repository is available.
-3. The gate is traceably revalidated against both conditions and a clearing decision is recorded.
+1. The stakeholder confirmed that the practical repository-setup outcome governed by SETUP-001 is satisfied. Synchronizing Azure DevOps work item 343 remains pending because the Azure DevOps MCP connection is unavailable.
+2. This `rusty-kode` repository is the separately available local Rust product repository.
+3. The revalidation evidence and clearing decision are recorded in [`docs/specs/MET-001-blocker-clearance.md`](../../docs/specs/MET-001-blocker-clearance.md).
 
 The `code-metrics-specs` directory is specification-only. It is not, and MUST NOT be used or represented as, the local Rust product repository.
 
@@ -135,4 +135,4 @@ The `code-metrics-specs` directory is specification-only. It is not, and MUST NO
 - The owning MET specifications for the registered analysis subcommands used in end-to-end dispatch verification.
 - Constitution v1.1.0 remains the controlling governance source.
 
-Repository delivery by itself does not clear this blocker. Until the traceable revalidation and clearing decision are recorded, `$speckit-plan`, `$speckit-tasks`, and `$speckit-implement` MUST NOT proceed for MET-001.
+Repository delivery alone did not clear this blocker. The linked revalidation and stakeholder-authorized clearing decision satisfy the gate, so `$speckit-plan`, `$speckit-tasks`, and `$speckit-implement` MAY proceed for MET-001. Azure DevOps synchronization remains a traceability follow-up and does not reverse the recorded decision.
