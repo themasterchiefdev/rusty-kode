@@ -1,1 +1,3 @@
 /target/
+/.harness-v4/local/
+.DS_Store

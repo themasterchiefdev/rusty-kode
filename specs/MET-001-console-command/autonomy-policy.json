@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "accepted_at": "2026-08-20T08:51:00Z",
+  "authority": "Stakeholder instruction in the rusty-kode dogfood task",
+  "mode": "unattended",
+  "rules": {
+    "human_scheduling_after_start": false,
+    "evidence_based_assumptions": true,
+    "scope_expansion": false,
+    "unsupported_product_decisions": "fail_closed",
+    "manual_implementation": false
+  },
+  "execution_boundary": {
+    "planning_coordinator": "Harness V4 on the host machine",
+    "development_and_verification": "rusty-kode dev container",
+    "post_planning_delivery": "harness-controlled Task Implementer workflow"
+  },
+  "blocker_clearance_record": "docs/specs/MET-001-blocker-clearance.md"
+}
