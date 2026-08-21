@@ -1,3 +1,3 @@
 pub mod cli;
 
-pub use cli::run;
+pub use cli::{Dispatch, run};
