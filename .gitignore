@@ -1,3 +1,10 @@
 /target/
 /.harness-v4/local/
 .DS_Store
+
+# Spec Kit planning artifacts are regenerated for each Harness run.
+/specs/*/contracts/
+/specs/*/data-model.md
+/specs/*/plan.md
+/specs/*/quickstart.md
+/specs/*/research.md
