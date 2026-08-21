@@ -2,6 +2,18 @@
 name = "rusty-kode"
 version = "0.1.0"
 edition = "2024"
+description = "A Python-first code metrics analyzer written in Rust"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/themasterchiefdev/rusty-kode"
+readme = "README.md"
+include = [
+    "src/**",
+    "tests/**",
+    "Cargo.toml",
+    "Cargo.lock",
+    "README.md",
+    "LICENSE",
+]
 
 [dependencies]
 clap = "4"

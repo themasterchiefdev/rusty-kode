@@ -1,6 +1,16 @@
 /target/
 /.harness-v4/local/
 .DS_Store
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+.idea/
+.vscode/
+*.swp
 
 # Spec Kit planning artifacts are regenerated for each Harness run.
 /specs/*/contracts/
