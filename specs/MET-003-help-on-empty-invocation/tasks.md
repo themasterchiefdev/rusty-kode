@@ -67,7 +67,7 @@ No standalone foundational task is needed. The repository-availability gate is a
 
 **Purpose**: Validate the complete MET-003 slice and preserve reproducible acceptance evidence.
 
-- [ ] T003 [deps:T001,T002] Validate the completed slice inside `rusty-kode-dev` using the commands in `specs/MET-003-help-on-empty-invocation/quickstart.md` (`cargo test`, focused `cargo test --test help_on_empty`, `cargo clippy --all-targets --all-features -- -D warnings`, `cargo fmt --all -- --check`, and a manual zero-argument binary invocation), then record the observed help=true, parser-failure=false, dispatch-invoked=false, non-empty identity-boundary result, feature `MET-003`, Azure work item `243`, and pinned Radon commit in `specs/MET-003-help-on-empty-invocation/acceptance.md` without claiming exact formatting, output stream, exit status, or downstream non-empty behavior.
+- [X] T003 [deps:T001,T002] Validate the completed slice inside `rusty-kode-dev` using the commands in `specs/MET-003-help-on-empty-invocation/quickstart.md` (`cargo test`, focused `cargo test --test help_on_empty`, `cargo clippy --all-targets --all-features -- -D warnings`, `cargo fmt --all -- --check`, and a manual zero-argument binary invocation), then record the observed help=true, parser-failure=false, dispatch-invoked=false, non-empty identity-boundary result, feature `MET-003`, Azure work item `243`, and pinned Radon commit in `specs/MET-003-help-on-empty-invocation/acceptance.md` without claiming exact formatting, output stream, exit status, or downstream non-empty behavior.
 
 ---
 
