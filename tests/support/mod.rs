@@ -8,7 +8,7 @@ use std::{
     rc::Rc,
 };
 
-use rusty_kode::MetricInput;
+use rusty_kode::{MetricInput, MetricInputOrigin};
 
 pub const FEATURE_ID: &str = "MET-003";
 pub const AZURE_WORK_ITEM: u32 = 243;
@@ -93,6 +93,14 @@ pub struct RecordingMetricInputConsumer {
 impl RecordingMetricInputConsumer {
     pub fn inputs(&self) -> Rc<RefCell<Vec<MetricInput>>> {
         Rc::clone(&self.inputs)
+    }
+
+    pub fn origins(&self) -> Vec<MetricInputOrigin> {
+        self.inputs
+            .borrow()
+            .iter()
+            .map(MetricInput::origin)
+            .collect()
     }
 }
 

@@ -8,6 +8,25 @@ use support::{
 };
 
 #[test]
+fn standard_input_handoff_exposes_origin_provenance() {
+    let evidence = standard_input_evidence_context();
+    let paths = [OsString::from("-")];
+    let (mut reader, _) = CountingReader::new("print('origin')\n");
+    let mut consumer = RecordingMetricInputConsumer::default();
+    let mut delegate = RecordingNonStandardInputDelegate::default();
+
+    rusty_kode::discover_inputs(&paths, &mut reader, &mut consumer, &mut delegate).unwrap_or_else(
+        |error| panic!("standard-input provenance discovery should succeed ({evidence}): {error}"),
+    );
+
+    assert_eq!(
+        consumer.origins(),
+        [rusty_kode::MetricInputOrigin::StandardInput],
+        "the public consumer seam should identify stdin explicitly ({evidence})"
+    );
+}
+
+#[test]
 fn single_standard_input_is_handed_off_atomically() {
     let evidence = standard_input_evidence_context();
     let source = "def answer():\n    return 42\n";
