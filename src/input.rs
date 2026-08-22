@@ -20,16 +20,23 @@ pub trait MetricInputConsumer {
     fn consume(&mut self, input: MetricInput);
 }
 
-pub fn discover_inputs<R, C>(
+pub trait NonStandardInputDelegate {
+    fn discover(&mut self, paths: &[OsString]);
+}
+
+pub fn discover_inputs<R, C, D>(
     paths: &[OsString],
     standard_input: &mut R,
     consumer: &mut C,
+    non_standard_input: &mut D,
 ) -> io::Result<()>
 where
     R: Read,
     C: MetricInputConsumer,
+    D: NonStandardInputDelegate,
 {
     if paths.is_empty() || !paths.iter().all(|path| path == "-") {
+        non_standard_input.discover(paths);
         return Ok(());
     }
 
