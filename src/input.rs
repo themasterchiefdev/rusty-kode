@@ -29,7 +29,7 @@ where
     R: Read,
     C: MetricInputConsumer,
 {
-    if paths != [OsString::from("-")] {
+    if paths.is_empty() || !paths.iter().all(|path| path == "-") {
         return Ok(());
     }
 
