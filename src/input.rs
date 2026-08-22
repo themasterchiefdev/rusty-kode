@@ -1,4 +1,12 @@
-use std::{ffi::OsString, io, io::Read};
+use std::{
+    ffi::{OsStr, OsString},
+    io,
+    io::Read,
+};
+
+pub fn is_python_filename(filename: &OsStr) -> bool {
+    filename.as_encoded_bytes().ends_with(b".py")
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum MetricInputOrigin {
