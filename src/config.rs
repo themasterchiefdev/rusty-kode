@@ -16,11 +16,14 @@ pub fn resolve_config_value(
     declared_default: ConfigValue,
     configured_value: Option<&str>,
 ) -> Result<ConfigValue, ConfigValueError> {
-    match (declared_default, configured_value) {
-        (ConfigValue::Integer(_), Some(value)) => resolve_integer(key, value),
-        (ConfigValue::Boolean(_), Some(value)) => resolve_boolean(key, value),
-        (ConfigValue::Text(_), Some(value)) => Ok(ConfigValue::Text(value.to_owned())),
-        _ => unimplemented!("later MET-020 slices resolve other default variants"),
+    let Some(value) = configured_value else {
+        return Ok(declared_default);
+    };
+
+    match declared_default {
+        ConfigValue::Integer(_) => resolve_integer(key, value),
+        ConfigValue::Boolean(_) => resolve_boolean(key, value),
+        ConfigValue::Text(_) => Ok(ConfigValue::Text(value.to_owned())),
     }
 }
 

@@ -136,3 +136,23 @@ fn text_defaults_preserve_configured_text_exactly() {
         );
     }
 }
+
+#[test]
+fn absent_configuration_preserves_every_declared_default() {
+    let context = typed_config_evidence_context();
+    let declared_defaults = [
+        ConfigValue::Integer(-42),
+        ConfigValue::Boolean(true),
+        ConfigValue::Text("original default".to_owned()),
+    ];
+
+    for declared_default in declared_defaults {
+        let actual = resolve_config_value("opaque-absent-fixture", declared_default.clone(), None);
+
+        assert_eq!(
+            actual,
+            Ok(declared_default),
+            "{context}, absent configured value"
+        );
+    }
+}
