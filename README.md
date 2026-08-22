@@ -16,6 +16,9 @@ The implemented command currently:
 - displays top-level help when invoked without arguments;
 - preserves non-empty argument sequences for downstream dispatch.
 
+The library exposes a filename-eligibility predicate that accepts only an exact lowercase `.py`
+suffix.
+
 ## Development
 
 Development is performed in the repository's dev container. Open the repository in a dev-container-compatible editor, then verify changes with:
