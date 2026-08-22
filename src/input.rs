@@ -1,9 +1,15 @@
 use std::{ffi::OsString, io, io::Read};
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum MetricInputOrigin {
+    StandardInput,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct MetricInput {
     display_name: String,
     source: String,
+    origin: MetricInputOrigin,
 }
 
 impl MetricInput {
@@ -13,6 +19,10 @@ impl MetricInput {
 
     pub fn source(&self) -> &str {
         &self.source
+    }
+
+    pub fn origin(&self) -> MetricInputOrigin {
+        self.origin
     }
 }
 
@@ -45,6 +55,7 @@ where
     consumer.consume(MetricInput {
         display_name: "-".to_owned(),
         source,
+        origin: MetricInputOrigin::StandardInput,
     });
 
     Ok(())

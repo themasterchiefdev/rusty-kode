@@ -169,4 +169,4 @@ docker exec -w /workspaces/rusty-kode rusty-kode-dev cargo fmt --all -- --check
 
 ## Phase 6: Convergence
 
-- [ ] T004 [deps:T003] Add an explicit standard-input origin/provenance discriminator to the public `MetricInput` contract in `src/input.rs`, set it when stdin discovery creates an input, re-export any public provenance type through `src/lib.rs`, and extend `tests/standard_input.rs` plus its recording consumer support to verify the discriminator through the public consumer seam as required by `data-model.md:33-42` and `contracts/standard-input.md:31-33` per tasks.md:163 (partial)
+- [X] T004 [deps:T003] Add an explicit standard-input origin/provenance discriminator to the public `MetricInput` contract in `src/input.rs`, set it when stdin discovery creates an input, re-export any public provenance type through `src/lib.rs`, and extend `tests/standard_input.rs` plus its recording consumer support to verify the discriminator through the public consumer seam as required by `data-model.md:33-42` and `contracts/standard-input.md:31-33` per tasks.md:163 (partial)
