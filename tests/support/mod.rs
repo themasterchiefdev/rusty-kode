@@ -57,6 +57,9 @@ pub const PYTHON_EXTENSION_AZURE_WORK_ITEM: u32 = 249;
 pub const PYTHON_SHEBANG_FEATURE_ID: &str = "MET-010";
 pub const PYTHON_SHEBANG_AZURE_WORK_ITEM: u32 = 250;
 
+pub const TYPED_CONFIG_FEATURE_ID: &str = "MET-020";
+pub const TYPED_CONFIG_AZURE_WORK_ITEM: u32 = 260;
+
 pub fn standard_input_evidence_context() -> String {
     format!(
         "feature={STANDARD_INPUT_FEATURE_ID}, azure_work_item={STANDARD_INPUT_AZURE_WORK_ITEM}, reference={RADON_REFERENCE}"
@@ -72,6 +75,12 @@ pub fn python_extension_evidence_context() -> String {
 pub fn python_shebang_evidence_context() -> String {
     format!(
         "feature={PYTHON_SHEBANG_FEATURE_ID}, azure_work_item={PYTHON_SHEBANG_AZURE_WORK_ITEM}, reference={RADON_REFERENCE}"
+    )
+}
+
+pub fn typed_config_evidence_context() -> String {
+    format!(
+        "feature={TYPED_CONFIG_FEATURE_ID}, azure_work_item={TYPED_CONFIG_AZURE_WORK_ITEM}, reference={RADON_REFERENCE}"
     )
 }
 

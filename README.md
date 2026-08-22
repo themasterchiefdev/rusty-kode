@@ -17,7 +17,9 @@ The implemented command currently:
 - preserves non-empty argument sequences for downstream dispatch.
 
 The library exposes input-eligibility predicates for exact lowercase `.py` filenames and for
-readable first lines that start with `#!` and contain the lowercase substring `python`.
+readable first lines that start with `#!` and contain the lowercase substring `python`. It also
+exposes a stateless configuration-value boundary that resolves configured text against declared
+integer, boolean, or text defaults without loading configuration sources or wiring command settings.
 
 ## Development
 
