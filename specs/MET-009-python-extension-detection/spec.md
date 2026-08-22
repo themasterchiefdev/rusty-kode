@@ -1,7 +1,8 @@
 # Feature Specification: MET-009 Python Extension Detection
 
 **Feature ID**: `MET-009`  
-**Azure work item**: [249 — MET-009: Python extension detection](https://dev.azure.com/yvrkarthik/code-metrics/_workitems/edit/249)  
+**Azure Work Item**: 249 — MET-009: Python extension detection
+**Source Attachment SHA-256**: `8a0dcdc0a58122eac1e59dc2b44602c2038c3260d0cee6a3010f4ed344185d8c`; private tracker URL omitted by stakeholder direction
 **Feature group**: Input discovery  
 **Created**: 2026-08-19  
 **Compatibility scope**: Observable Python-source input-eligibility behavior only; this is one independently testable compatibility slice.
