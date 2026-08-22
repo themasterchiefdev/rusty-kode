@@ -3,12 +3,12 @@
 **Feature ID**: `MET-007`  
 **Azure Work Item**: [247 — MET-007: Standard input](https://dev.azure.com/yvrkarthik/code-metrics/_workitems/edit/247)  
 **Feature Group**: Input discovery  
-**Target Surface**: CLI  
+**Target Surface**: CLI input-discovery and consumer seam
 **Created**: 2026-08-19  
 
 ## Repository Readiness and Implementation Sequencing
 
-**Specification status**: READY — repository gate cleared; implementation sequencing defined.
+**Specification status**: READY — repository gate cleared; implementation sequencing and acceptance boundary clarified.
 
 **Repository status**: READY. SETUP-001 / Azure work item 343 is closed, and the local Rust product repository `rusty-kode` is available. The former repository-availability blocker is cleared and does not restrict planning, task generation, or implementation.
 
@@ -22,6 +22,8 @@ Only the prerequisites listed above constrain implementation order. References e
 
 This independently testable compatibility slice lets a developer pipe Python source into the analyser without creating a temporary file. When the complete supplied path set is the standard-input token `-`, discovery yields the piped source under the filename `-`. The slice preserves externally observable behavior of the pinned Radon reference and does not prescribe implementation design.
 
+**Approved acceptance-boundary clarification (2026-08-22)**: MET-007 is accepted at the input-discovery API and an injectable `MetricInput` consumer seam. Acceptance proves that the complete discovered standard-input payload or delegated path collection reaches that seam unchanged. A real metric analyser, user-facing output, persistence, diagnostics owned by metric execution, and payload-sensitive built-binary acceptance are deferred to the later metric-analysis stories that own those behaviors. MET-007 MUST NOT invent those downstream behaviors merely to make its handoff observable.
+
 **Authority order applied**: stakeholder direction; enriched Azure story and acceptance criteria; pinned Radon source and test evidence; tracker wording. The authoritative evidence packet is [MET-007](../../intake/stories/MET-007.md); the product governance authority is [Constitution v1.1.0](../../.specify/memory/constitution.md).
 
 **Pinned compatibility reference**: [Radon at commit `54b88e5878b2724bf4d77f97349588b811abdff2`](https://github.com/rubik/radon/tree/54b88e5878b2724bf4d77f97349588b811abdff2), with [discovery/open evidence](https://github.com/rubik/radon/blob/54b88e5878b2724bf4d77f97349588b811abdff2/radon/cli/tools.py#L214-L224), [sentinel-handling evidence](https://github.com/rubik/radon/blob/54b88e5878b2724bf4d77f97349588b811abdff2/radon/cli/tools.py#L244-L269), and [standard-input test evidence](https://github.com/rubik/radon/blob/54b88e5878b2724bf4d77f97349588b811abdff2/radon/tests/test_cli_tools.py#L40-L75).
@@ -32,7 +34,8 @@ This independently testable compatibility slice lets a developer pipe Python sou
 - In scope: treating one or more repeated `-` entries as the same standard-input-only path set.
 - In scope: yielding piped Python source with the observable filename `-`, enabling pipelines without temporary files.
 - In scope: preserving the compatibility quirk that a path set mixing `-` with file paths does not read standard input.
-- Out of scope: file or directory discovery, metric calculations, report formatting, support for languages other than Python, implicit standard-input fallback when no path is supplied, and defining behavior for mixed `-` plus non-file path kinds not assigned by the evidence packet.
+- In scope: handing the selected `MetricInput` to an injectable consumer seam without losing source identity, source content, path order, or path multiplicity.
+- Out of scope: a real metric consumer, built-binary payload observability, user-facing output, persistence, metric-owned diagnostics, file or directory discovery, metric calculations, report formatting, support for languages other than Python, implicit standard-input fallback when no path is supplied, and defining behavior for mixed `-` plus non-file path kinds not assigned by the evidence packet.
 - This slice is atomic within Input discovery. It may share delivery seams with adjacent stories, but does not combine or supersede them and retains its own acceptance evidence.
 
 ### Evidence Discrepancy Resolution
@@ -47,12 +50,12 @@ As a developer, I want to pipe Python source to the analyser using `-` so that I
 
 **Why this priority**: This is the story's direct user value and required observable compatibility behavior.
 
-**Independent Test**: Pipe valid Python source to a metric command while supplying only `-`; verify that it analyzes the piped source and identifies the resulting input as `-`.
+**Independent Test**: Supply valid Python source and only `-` through the input-discovery API; verify that the injectable consumer seam receives the complete source once with identity `-`.
 
 **Acceptance Scenarios**:
 
-1. **Given** valid Python source is available through standard input and the supplied path set is one `-`, **When** the developer invokes a metric command, **Then** discovery reads the supplied standard input and yields it under filename `-`.
-2. **Given** valid Python source is available through standard input and the supplied path set contains repeated `-` entries only, **When** the developer invokes a metric command, **Then** discovery reads standard input once and yields one input under filename `-`.
+1. **Given** valid Python source is available through standard input and the supplied path set is one `-`, **When** the input-discovery seam runs, **Then** it reads the supplied standard input and hands the complete source to the injectable consumer once under filename `-`.
+2. **Given** valid Python source is available through standard input and the supplied path set contains repeated `-` entries only, **When** the input-discovery seam runs, **Then** it reads standard input once and hands one complete input to the injectable consumer under filename `-`.
 
 ---
 
@@ -62,12 +65,12 @@ As a developer, I want standard input to be used only for the dedicated `-` path
 
 **Why this priority**: The sentinel boundary and its mixed-input quirk are observable compatibility behavior that protects predictable command use.
 
-**Independent Test**: Provide standard input and invoke a metric command with `-` plus a file path; verify that discovery does not read standard input. Compare the outcome with the pinned reference.
+**Independent Test**: Provide standard input and call the input-discovery API with `-` plus a file path; verify that it does not read standard input and that the injectable consumer receives the complete ordered path collection unchanged. Compare the discovery outcome with the pinned reference.
 
 **Acceptance Scenarios**:
 
-1. **Given** Python source is available through standard input and the supplied path set contains `-` plus a file path, **When** the developer invokes a metric command, **Then** discovery does not read standard input.
-2. **Given** a supplied path set that is not composed only of `-`, **When** the developer invokes a metric command, **Then** the command does not treat any `-` entry as a standard-input request.
+1. **Given** Python source is available through standard input and the supplied path set contains `-` plus a file path, **When** the input-discovery seam runs, **Then** it does not read standard input and hands the complete ordered path collection to the injectable consumer unchanged.
+2. **Given** a supplied path set that is not composed only of `-`, **When** the input-discovery seam runs, **Then** it does not treat any `-` entry as a standard-input request and preserves the complete path collection for the injectable consumer.
 
 ### Edge Cases
 
@@ -80,44 +83,48 @@ As a developer, I want standard input to be used only for the dedicated `-` path
 
 ### Functional Requirements
 
-- **FR-001**: When the complete supplied path set consists only of `-`, the analyser MUST read the available standard input.
+- **FR-001**: When the complete supplied path set consists only of `-`, the input-discovery seam MUST read the available standard input.
 - **FR-002**: For an FR-001 standard-input read, discovery MUST yield the input under the filename `-`.
 - **FR-003**: A supplied path set containing one or more `-` entries and no other path values MUST be treated as the same standard-input-only request, regardless of the number of repeated `-` entries.
-- **FR-004**: For an FR-003 request, the analyser MUST read standard input exactly once and yield exactly one input under filename `-`.
-- **FR-005**: When a supplied path set includes `-` and at least one file path, the analyser MUST NOT read standard input.
-- **FR-006**: The analyser MUST NOT infer a standard-input request when the supplied path set is empty.
-- **FR-007**: This feature MUST preserve the pinned reference's observable input identity, results, diagnostics, and failure behavior for its documented acceptance scenarios.
+- **FR-004**: For an FR-003 request, the input-discovery seam MUST read standard input exactly once and hand exactly one complete input to the injectable consumer under filename `-`.
+- **FR-005**: When a supplied path set includes `-` and at least one file path, the input-discovery seam MUST NOT read standard input and MUST hand the complete ordered path collection to the injectable consumer unchanged.
+- **FR-006**: The input-discovery seam MUST NOT infer a standard-input request when the supplied path set is empty and MUST preserve the empty collection for the injectable consumer.
+- **FR-007**: Within MET-007's clarified acceptance boundary, this feature MUST preserve the pinned reference's observable input identity, source content, path collection, read behavior, and discovery failures. Metric results and metric-owned diagnostics are outside this feature.
 - **FR-008**: This feature MUST support Python source only; behavior for other languages is outside MET-007.
+- **FR-009**: Acceptance MUST be demonstrated through the input-discovery API and injectable `MetricInput` consumer seam; MET-007 MUST NOT require or invent a production metric consumer or payload-sensitive built-binary output.
 
 ### Acceptance Mapping
 
 | Requirement | Independently verifiable acceptance evidence |
 | --- | --- |
-| FR-001, FR-002 | User Story 1 scenario 1; Azure acceptance criterion; pinned standard-input test evidence |
-| FR-003, FR-004 | User Story 1 scenario 2; pinned sentinel-handling evidence |
-| FR-005 | User Story 2 scenarios 1–2; pinned sentinel-handling evidence |
+| FR-001, FR-002 | User Story 1 scenario 1 through the injectable consumer seam; Azure acceptance criterion; pinned standard-input test evidence |
+| FR-003, FR-004 | User Story 1 scenario 2 through the injectable consumer seam; pinned sentinel-handling evidence |
+| FR-005 | User Story 2 scenarios 1–2 through the injectable consumer seam; pinned sentinel-handling evidence |
 | FR-006 | Edge Cases; scope review against the absence of an implicit fallback requirement |
-| FR-007 | Comparison of all documented scenarios against the pinned reference links |
+| FR-007 | Comparison of discovery-boundary observations for all documented scenarios against the pinned reference links |
 | FR-008 | Stakeholder direction, Constitution Principle II, and Python-source scenario inputs |
+| FR-009 | Approved acceptance-boundary clarification dated 2026-08-22 |
 
 ### Key Entities
 
 - **Supplied path set**: The complete collection of positional analysis-path values supplied in one invocation; standard input is requested only when this set contains `-` and no other value.
 - **Standard-input token**: The literal supplied path value `-`.
-- **Discovered input**: The source made available for analysis, including its observable filename; standard input is identified as `-`.
+- **Discovered input**: The source handed unchanged to the injectable consumer seam, including its observable filename; standard input is identified as `-`.
+- **Injectable MetricInput consumer seam**: The MET-007 acceptance boundary that observes the selected standard-input payload or delegated path collection without defining downstream metric behavior.
 
 ## Success Criteria
 
 ### Measurable Outcomes
 
-- **SC-001**: Across the documented standard-input acceptance runs, 100% of invocations whose supplied path set is only `-` read the piped Python source and yield one input named `-`.
-- **SC-002**: Across the documented repeated-token acceptance runs, 100% of invocations with two or more `-` entries and no other path yield one input named `-` and consume standard input once.
-- **SC-003**: Across the documented mixed-path acceptance runs, 100% of invocations containing `-` plus a file path do not read standard input.
-- **SC-004**: For 100% of documented acceptance scenarios, the observable result, input identity, diagnostics, and failure behavior match the pinned compatibility reference.
+- **SC-001**: Across the documented standard-input acceptance runs, 100% of calls whose supplied path set is only `-` read the piped Python source and hand one complete input named `-` to the injectable consumer.
+- **SC-002**: Across the documented repeated-token acceptance runs, 100% of calls with two or more `-` entries and no other path hand one complete input named `-` to the injectable consumer and consume standard input once.
+- **SC-003**: Across the documented mixed-path acceptance runs, 100% of calls containing `-` plus a file path do not read standard input and hand the complete ordered path collection to the injectable consumer unchanged.
+- **SC-004**: For 100% of documented acceptance scenarios, the discovery-boundary input identity, source content, path collection, read behavior, and discovery failure match the pinned compatibility reference.
+- **SC-005**: All MET-007 acceptance tests pass without introducing a production metric consumer, user-facing output, persistence, metric-owned diagnostics, or a payload-sensitive built-binary contract.
 
 ## Assumptions and Dependencies
 
 - Standard input is available to the command for scenarios that explicitly pipe source; the supplied authority defines no alternate behavior when it is unavailable.
-- The scope is restricted to discovery behavior for Python source; metric interpretation and presentation are established by other compatibility slices.
+- The scope is restricted to discovery behavior and lossless handoff at the injectable consumer seam for Python source; metric interpretation, production consumption, built-binary payload observability, and presentation are established by later compatibility slices.
 - The pinned Radon commit is the reproducible compatibility reference for acceptance comparison.
 - Repository readiness is satisfied by the available `rusty-kode` product repository; delivery is governed by the dependency sequence recorded below.
