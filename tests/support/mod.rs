@@ -14,6 +14,22 @@ pub const FEATURE_ID: &str = "MET-003";
 pub const AZURE_WORK_ITEM: u32 = 243;
 pub const RADON_REFERENCE: &str = "54b88e5878b2724bf4d77f97349588b811abdff2";
 
+pub const VERSION_FEATURE_ID: &str = "MET-004";
+pub const VERSION_AZURE_WORK_ITEM: u32 = 244;
+
+pub fn run_rusty_kode_with_version() -> Output {
+    Command::new(env!("CARGO_BIN_EXE_rusty-kode"))
+        .arg("--version")
+        .output()
+        .expect("MET-004 acceptance binary should be executable")
+}
+
+pub fn version_evidence_context() -> String {
+    format!(
+        "feature={VERSION_FEATURE_ID}, azure_work_item={VERSION_AZURE_WORK_ITEM}, reference={RADON_REFERENCE}"
+    )
+}
+
 pub fn run_rusty_kode_without_arguments() -> Output {
     Command::new(env!("CARGO_BIN_EXE_rusty-kode"))
         .output()

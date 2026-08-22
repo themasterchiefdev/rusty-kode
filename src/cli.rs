@@ -16,7 +16,9 @@ where
 }
 
 pub fn command() -> Command {
-    Command::new("rusty-kode").about("Analyze Python code metrics")
+    Command::new("rusty-kode")
+        .about("Analyze Python code metrics")
+        .version(env!("CARGO_PKG_VERSION"))
 }
 
 pub fn run<I, D, W>(arguments: I, dispatch: D, output: &mut W) -> io::Result<()>
@@ -26,6 +28,11 @@ where
     W: io::Write,
 {
     let arguments: Vec<_> = arguments.into_iter().collect();
+
+    if arguments.len() == 1 && arguments[0].to_str() == Some("--version") {
+        write!(output, "{}", command().render_version())?;
+        return Ok(());
+    }
 
     if arguments.is_empty() {
         command().write_help(output)?;
