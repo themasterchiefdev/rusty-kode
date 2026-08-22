@@ -123,4 +123,4 @@ MET-010 contains one P1 story and one observable classification behavior, so com
 
 ## Phase 5: Convergence
 
-- [ ] T002 [deps:T001] Add `python_shebang_evidence_context()` assertion messages to every `.py` rule-separation assertion in `tests/python_shebang_detection.rs` so each acceptance verification records MET-010, Azure work item 250, and pinned Radon commit `54b88e5878b2724bf4d77f97349588b811abdff2` evidence per FR-007 / SC-003 (partial)
+- [X] T002 [deps:T001] Add `python_shebang_evidence_context()` assertion messages to every `.py` rule-separation assertion in `tests/python_shebang_detection.rs` so each acceptance verification records MET-010, Azure work item 250, and pinned Radon commit `54b88e5878b2724bf4d77f97349588b811abdff2` evidence per FR-007 / SC-003 (partial)

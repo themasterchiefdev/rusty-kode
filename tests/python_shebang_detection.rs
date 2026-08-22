@@ -85,12 +85,22 @@ fn eligibility_depends_only_on_a_readable_python_shebang_first_line() {
     );
 
     let extensionless = fixtures.write("extensionless", b"#!/usr/bin/env python\n");
-    assert!(rusty_kode::has_python_shebang(&extensionless));
-    assert!(!rusty_kode::is_python_filename(extensionless.as_os_str()));
+    assert!(
+        rusty_kode::has_python_shebang(&extensionless),
+        "an extensionless Python shebang should remain eligible ({evidence})"
+    );
+    assert!(
+        !rusty_kode::is_python_filename(extensionless.as_os_str()),
+        "shebang eligibility must remain separate from the .py rule ({evidence})"
+    );
 
     let python_filename = fixtures.write("module.py", b"print('no shebang')\n");
-    assert!(rusty_kode::is_python_filename(
-        Path::new("module.py").as_os_str()
-    ));
-    assert!(!rusty_kode::has_python_shebang(&python_filename));
+    assert!(
+        rusty_kode::is_python_filename(Path::new("module.py").as_os_str()),
+        ".py eligibility must remain independent of shebang evidence ({evidence})"
+    );
+    assert!(
+        !rusty_kode::has_python_shebang(&python_filename),
+        "a .py filename alone must not satisfy the shebang rule ({evidence})"
+    );
 }
