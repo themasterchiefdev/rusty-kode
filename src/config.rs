@@ -18,6 +18,7 @@ pub fn resolve_config_value(
 ) -> Result<ConfigValue, ConfigValueError> {
     match (declared_default, configured_value) {
         (ConfigValue::Integer(_), Some(value)) => resolve_integer(key, value),
+        (ConfigValue::Boolean(_), Some(value)) => resolve_boolean(key, value),
         _ => unimplemented!("later MET-020 slices resolve other default variants"),
     }
 }
@@ -34,4 +35,27 @@ fn resolve_integer(key: &str, value: &str) -> Result<ConfigValue, ConfigValueErr
         key: key.to_owned(),
         value: value.to_owned(),
     })
+}
+
+fn resolve_boolean(key: &str, value: &str) -> Result<ConfigValue, ConfigValueError> {
+    let boolean = if ["1", "yes", "true", "on"]
+        .iter()
+        .any(|token| value.eq_ignore_ascii_case(token))
+    {
+        Some(true)
+    } else if ["0", "no", "false", "off"]
+        .iter()
+        .any(|token| value.eq_ignore_ascii_case(token))
+    {
+        Some(false)
+    } else {
+        None
+    };
+
+    boolean
+        .map(ConfigValue::Boolean)
+        .ok_or_else(|| ConfigValueError::InvalidBoolean {
+            key: key.to_owned(),
+            value: value.to_owned(),
+        })
 }

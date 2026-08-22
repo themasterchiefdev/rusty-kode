@@ -61,3 +61,51 @@ fn integer_defaults_resolve_only_strict_signed_i64_text() {
         );
     }
 }
+
+#[test]
+fn boolean_defaults_resolve_only_the_pinned_untrimmed_tokens() {
+    let context = typed_config_evidence_context();
+    let valid_examples = [
+        ("1", true),
+        ("yes", true),
+        ("TRUE", true),
+        ("oN", true),
+        ("0", false),
+        ("NO", false),
+        ("False", false),
+        ("off", false),
+    ];
+
+    for (configured_value, expected) in valid_examples {
+        let actual = resolve_config_value(
+            "opaque-valid-fixture",
+            ConfigValue::Boolean(!expected),
+            Some(configured_value),
+        );
+
+        assert_eq!(
+            actual,
+            Ok(ConfigValue::Boolean(expected)),
+            "{context}, configured_value={configured_value:?}"
+        );
+    }
+
+    let invalid_examples = ["", " true", "true ", "enabled", "2"];
+
+    for configured_value in invalid_examples {
+        let actual = resolve_config_value(
+            "opaque-invalid-fixture",
+            ConfigValue::Boolean(false),
+            Some(configured_value),
+        );
+
+        assert_eq!(
+            actual,
+            Err(ConfigValueError::InvalidBoolean {
+                key: "opaque-invalid-fixture".to_owned(),
+                value: configured_value.to_owned(),
+            }),
+            "{context}, configured_value={configured_value:?}"
+        );
+    }
+}
