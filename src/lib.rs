@@ -4,5 +4,5 @@ pub mod input;
 pub use cli::{Dispatch, run};
 pub use input::{
     MetricInput, MetricInputConsumer, MetricInputOrigin, NonStandardInputDelegate, discover_inputs,
-    is_python_filename,
+    has_python_shebang, is_python_filename,
 };

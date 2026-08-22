@@ -16,8 +16,8 @@ The implemented command currently:
 - displays top-level help when invoked without arguments;
 - preserves non-empty argument sequences for downstream dispatch.
 
-The library exposes a filename-eligibility predicate that accepts only an exact lowercase `.py`
-suffix.
+The library exposes input-eligibility predicates for exact lowercase `.py` filenames and for
+readable first lines that start with `#!` and contain the lowercase substring `python`.
 
 ## Development
 
