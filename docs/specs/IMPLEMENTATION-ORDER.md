@@ -2,6 +2,8 @@
 
 Feature IDs remain stable traceability identifiers; they are not implementation sequence numbers. The canonical sequence below is a topological order of the hard-prerequisite graph. Stories in the same wave may proceed independently or in parallel.
 
+Public specifications and documentation retain work-item IDs for traceability but MUST NOT include private tracker URLs.
+
 Repository readiness is satisfied by the closed SETUP-001 work item 343 and the available `rusty-kode` Rust repository.
 
 ## Wave 1

@@ -113,7 +113,7 @@ As a developer with the product installed, I can invoke `radon` from a shell wit
 ### Azure Story
 
 - **Story**: MET-001 — Console command
-- **Azure work item**: [241](https://dev.azure.com/yvrkarthik/code-metrics/_workitems/edit/241)
+- **Azure work item**: 241
 - **Canonical user need**: A developer invokes the analyzer from a command line to analyze source code from a shell.
 - **Canonical acceptance criterion**: The installed command starts the CLI and dispatches to the selected analysis subcommand.
 - **Requirement mapping**: Azure acceptance is expressed by FR-001 through FR-003 and Acceptance Scenarios 1–2; independent installation evidence is strengthened by FR-005 because the reference has no focused installation test.

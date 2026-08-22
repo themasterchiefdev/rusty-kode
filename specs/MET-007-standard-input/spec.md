@@ -1,7 +1,7 @@
 # Feature Specification: MET-007 Standard Input
 
 **Feature ID**: `MET-007`  
-**Azure Work Item**: [247 — MET-007: Standard input](https://dev.azure.com/yvrkarthik/code-metrics/_workitems/edit/247)  
+**Azure Work Item**: 247 — MET-007: Standard input
 **Feature Group**: Input discovery  
 **Target Surface**: CLI input-discovery and consumer seam
 **Created**: 2026-08-19  
