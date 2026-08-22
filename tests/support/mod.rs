@@ -2,6 +2,7 @@
 
 use std::{
     cell::{Cell, RefCell},
+    ffi::OsString,
     io::{self, Cursor, Read},
     process::{Command, Output},
     rc::Rc,
@@ -76,6 +77,14 @@ impl Read for FailingReader {
     }
 }
 
+pub struct PanicOnRead;
+
+impl Read for PanicOnRead {
+    fn read(&mut self, _buffer: &mut [u8]) -> io::Result<usize> {
+        panic!("non-standard input routing must not read standard input")
+    }
+}
+
 #[derive(Clone, Default)]
 pub struct RecordingMetricInputConsumer {
     inputs: Rc<RefCell<Vec<MetricInput>>>,
@@ -90,5 +99,22 @@ impl RecordingMetricInputConsumer {
 impl rusty_kode::MetricInputConsumer for RecordingMetricInputConsumer {
     fn consume(&mut self, input: MetricInput) {
         self.inputs.borrow_mut().push(input);
+    }
+}
+
+#[derive(Clone, Default)]
+pub struct RecordingNonStandardInputDelegate {
+    delegated_paths: Rc<RefCell<Vec<Vec<OsString>>>>,
+}
+
+impl RecordingNonStandardInputDelegate {
+    pub fn delegated_paths(&self) -> Rc<RefCell<Vec<Vec<OsString>>>> {
+        Rc::clone(&self.delegated_paths)
+    }
+}
+
+impl rusty_kode::NonStandardInputDelegate for RecordingNonStandardInputDelegate {
+    fn discover(&mut self, paths: &[OsString]) {
+        self.delegated_paths.borrow_mut().push(paths.to_vec());
     }
 }
