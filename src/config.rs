@@ -19,6 +19,7 @@ pub fn resolve_config_value(
     match (declared_default, configured_value) {
         (ConfigValue::Integer(_), Some(value)) => resolve_integer(key, value),
         (ConfigValue::Boolean(_), Some(value)) => resolve_boolean(key, value),
+        (ConfigValue::Text(_), Some(value)) => Ok(ConfigValue::Text(value.to_owned())),
         _ => unimplemented!("later MET-020 slices resolve other default variants"),
     }
 }

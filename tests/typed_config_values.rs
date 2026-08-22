@@ -109,3 +109,30 @@ fn boolean_defaults_resolve_only_the_pinned_untrimmed_tokens() {
         );
     }
 }
+
+#[test]
+fn text_defaults_preserve_configured_text_exactly() {
+    let context = typed_config_evidence_context();
+    let configured_values = [
+        "-42",
+        "TRUE",
+        "[alpha, beta]",
+        "enum-like-value",
+        "  padded text  ",
+        "١٢",
+    ];
+
+    for configured_value in configured_values {
+        let actual = resolve_config_value(
+            "opaque-text-fixture",
+            ConfigValue::Text("original default".to_owned()),
+            Some(configured_value),
+        );
+
+        assert_eq!(
+            actual,
+            Ok(ConfigValue::Text(configured_value.to_owned())),
+            "{context}, configured_value={configured_value:?}"
+        );
+    }
+}
