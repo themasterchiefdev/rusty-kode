@@ -1,7 +1,7 @@
 # Feature Specification: MET-003 Help on Empty Invocation
 
 **Feature ID**: `MET-003`  
-**Azure Work Item**: [243 — MET-003: Help on empty invocation](https://dev.azure.com/yvrkarthik/code-metrics/_workitems/edit/243)  
+**Azure Work Item**: 243 — MET-003: Help on empty invocation
 **Feature Group**: Entrypoints  
 **Created**: 2026-08-19  
 **Input Authority**: `intake/stories/MET-003.md` and Code Metrics Analyzer Constitution v1.1.0 only
@@ -38,7 +38,7 @@ New users who invoke the command-line analyzer without supplying a command need 
 ### Evidence and Precedence
 
 1. Stakeholder direction in the MET-003 evidence packet: a Rust behavioral port of pinned Radon, Python source analysis first; other languages are future scope.
-2. [Azure work item 243](https://dev.azure.com/yvrkarthik/code-metrics/_workitems/edit/243): a new user omitting a command receives useful help; its acceptance criterion says `-h` is appended before parsing.
+2. Azure work item 243: a new user omitting a command receives useful help; its acceptance criterion says `-h` is appended before parsing.
 3. Pinned Radon reference at commit [`54b88e5878b2724bf4d77f97349588b811abdff2`](https://github.com/rubik/radon/tree/54b88e5878b2724bf4d77f97349588b811abdff2), [`radon/__init__.py` lines 7–17](https://github.com/rubik/radon/blob/54b88e5878b2724bf4d77f97349588b811abdff2/radon/__init__.py#L7-L17): the reference's no-argument path causes help to be shown; the packet records no direct reference test.
 
 ### Discrepancy Resolution
