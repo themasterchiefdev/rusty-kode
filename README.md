@@ -12,6 +12,7 @@ This project is still at an early stage and is not ready for production use.
 
 The implemented command currently:
 
+- reports the application version when invoked with `--version`;
 - displays top-level help when invoked without arguments;
 - preserves non-empty argument sequences for downstream dispatch.
 
@@ -31,6 +32,12 @@ Run the current executable with:
 
 ```sh
 cargo run
+```
+
+Report the application version with:
+
+```sh
+cargo run -- --version
 ```
 
 ## Project status
