@@ -1,11 +1,25 @@
 use std::{
     ffi::{OsStr, OsString},
+    fs::File,
     io,
-    io::Read,
+    io::{BufRead, BufReader, Read},
+    path::Path,
 };
 
 pub fn is_python_filename(filename: &OsStr) -> bool {
     filename.as_encoded_bytes().ends_with(b".py")
+}
+
+pub fn has_python_shebang(path: &Path) -> bool {
+    let Ok(file) = File::open(path) else {
+        return false;
+    };
+    let mut first_line = String::new();
+    if BufReader::new(file).read_line(&mut first_line).is_err() {
+        return false;
+    }
+
+    first_line.starts_with("#!") && first_line.contains("python")
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
